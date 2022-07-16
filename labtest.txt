@@ -1,0 +1,687 @@
+ --lab 01:
+drop table submission;
+drop table judge;
+drop table languages;
+drop table problem;
+drop table contest; 
+drop table team; 
+drop table history;
+create table history (
+tot_solved INTEGER,
+Team_id varchar(10)  not null primary key
+);
+--lab 03
+--ALTER TABLE history ADD CONSTRAINT pk_history
+--PRIMARY KEY (Team_id);
+CREATE TABLE Team(
+    Team_id varchar(10),
+   stu_id INTEGER,
+    Stu_name VARCHAR2(20),
+    T_name varchar(20) , 
+    Varsity_name VARCHAR2(100) ,
+PRIMARY KEY (stu_id)
+-- foreign key (Team_id) references history(Team_id)
+);
+create table contest(
+    contest_id varchar(10) not null,
+stu_id integer,
+    standing  INTEGER,
+solve_number INTEGER,
+solving_year varchar(20),
+Team_id varchar(10) not null,
+   contest_name VARCHAR2(100),   
+PRIMARY KEY (Team_id,contest_id)
+ -- foreign key (Team_id) references history(Team_id)
+-- foreign key (stu_id) references Team(stu_id) ON DELETE CASCADE
+);
+
+ALTER TABLE  contest ADD CONSTRAINT fk_contest
+ foreign key (Team_id) references history(Team_id);
+ALTER TABLE  contest ADD CONSTRAINT fk2_contest
+ foreign key (stu_id) references Team(stu_id);
+
+
+create table Problem(
+   active_status varchar(4),
+Team_id varchar(10)  not null,    --lab 03 (using not null key constraints)
+contest_id varchar(10)  not null,     --lab 03 (using not null key constraints)
+    p_id varchar(10)  not null,
+p_name varchar(20),
+PRIMARY KEY (Team_id,contest_id,p_id),
+foreign key (Team_id,contest_id) references contest(Team_id,contest_id)
+);
+create table Languages(
+contest_id varchar(10) not null, 
+Team_id varchar(10) not null,
+  l_name varchar(10),
+    p_id varchar(10) not null,
+PRIMARY KEY (Team_id,contest_id,p_id),
+foreign key (Team_id,contest_id,  p_id) references Problem(Team_id,contest_id,  p_id)
+);
+
+create table Judge(
+   p_succ_status varchar(4),
+    j_id varchar(10) not null,
+j_name varchar(20),
+contest_id varchar(10) not null,
+Team_id varchar(10) not null,
+p_id varchar(10) not null,
+PRIMARY KEY (Team_id,contest_id,p_id, j_id),
+foreign key (Team_id,contest_id,  p_id) references Languages(Team_id,contest_id,  p_id)
+);
+create table Submission(
+penalty_time INTEGER,
+   p_result_status varchar(10),
+contest_id varchar(10) not null,
+Team_id varchar(10) not null,
+p_id varchar(10) not null,
+PRIMARY KEY (Team_id,contest_id,p_id),
+ foreign key (Team_id,contest_id,  p_id) references Problem(Team_id,contest_id,  p_id)
+);
+
+insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name, stu_id) values ('11111', 'isha','a_val','DIU',1);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name, stu_id ) values ('11111', 'misha','a_val','DIU',2);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name,stu_id ) values ('11111', 'tisha','a_val','DIU',3);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name, stu_id ) values ('22221', 'barsha','b_val','EDU',4);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name, stu_id ) values ('22221', 'manisha','b_val','EDU',5);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name, stu_id ) values('22221', 'tuna','b_val','EDU',6);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name, stu_id ) values ('34421', 'pasha','c_vlyk','RUET',7);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name, stu_id ) values ('34421', 'parisa','c_vlyk','RUET',8);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name ,stu_id ) values ('34421', 'koha','c_vlyk','RUET',9);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name , stu_id) values ('43111', 'anisa','phoenix','KU',10);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name , stu_id) values ('43111', 'lisa','phoenix','KU',11);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name , stu_id ) values ('43111', 'koraish','phoenix','KU',12);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name , stu_id) values ('42181', 'rudva','noerror','BUET',13);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name , stu_id) values ('42181', 'rudhmila','noerror','BUET',14);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name , stu_id) values ('42181', 'shahana','noerror','BUET',15);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name , stu_id) values ('19281', 'arafat','parsist','KUET',16);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name , stu_id) values ('19281', 'zunayet','parsist','KUET',17);
+ insert into Team(Team_id ,  Stu_name ,  T_name,  Varsity_name , stu_id) values ('19281', 'raha','parsist','KUET',18);
+
+insert into history(tot_solved,Team_id)  values(0,'11111');
+insert into history(tot_solved,Team_id)  values(0,'22221');
+insert into history(tot_solved,Team_id)  values(0,'34421');
+insert into history(tot_solved,Team_id)  values(0,'43111');
+insert into history(tot_solved,Team_id)  values(0,'42181');
+insert into history(tot_solved,Team_id)  values(0,'19281');
+ 
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('501123', 6,  5, '2017-12-12','19281','collaborative_icpc1',16);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('601123', 1,  8, '2017-12-07','19281','collaborative_icpc2',17);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('701123', 2,  5, '2018-09-10','19281','collaborative_icpc3',18);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('801123', 8,  6, '2017-12-12','19281','collaborative_icpc4',16);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('201123', 5,  3, '2020-12-12','19281','collaborative_ngpc',17);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('531123', 4,  4, '2021-12-12','19281','collaborative_iupc',18);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('504123', 3,  2, '2012-12-12','19281','collaborative_aust_iupc',16);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('521123', 2,  1, '2016-12-12','19281','collaborative_fda',17);
+
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('501123', 5,  6, '2017-12-12', '42181',  'collaborative_icpc1',13);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('601123', 2,  9, '2017-12-07', '42181','collaborative_icpc2',14);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('801123', 8,  5, '2017-12-12','42181','collaborative_icpc4' ,15);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('901123', 7,  2, '2018-12-12',  '42181','collaborative_icpc5' ,13);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('101123', 6,  4, '2019-12-12','42181', 'collaborative_icpc6' ,14);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('201123', 5,  3, '2020-12-12','42181','collaborative_ngpc', 15);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('531123', 4,  4, '2021-12-12','42181','collaborative_iupc' ,13);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('504123', 3,  2, '2012-12-12','42181', 'collaborative_aust_iupc' ,14);
+
+
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('501123', 4,  7, '2017-12-12',  '43111', 'collaborative_icpc1' ,10);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('601123', 3,  8, '2017-12-07',  '43111', 'collaborative_icpc2' ,11);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('901123', 7,  3, '2018-12-12',  '43111', 'collaborative_icpc5' ,12);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('101123', 6,  5, '2019-12-12',  '43111', 'collaborative_icpc6' ,10);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('201123', 5,  3, '2020-12-12',   '43111', 'collaborative_ngpc' ,11);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('531123', 4,  4, '2021-12-12',  '43111', 'collaborative_iupc',10);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('504123', 3,  2, '2012-12-12',    '43111', 'collaborative_aust_iupc' ,12);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('521123', 2,  1, '2016-12-12',  '43111', 'collaborative_fda' ,11);
+
+
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('601123', 4,  8, '2017-12-07', '11111','collaborative_icpc2' ,1);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('701123', 3,  5, '2018-09-10', '11111', 'collaborative_icpc3',2);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('801123', 8,  6, '2017-12-12', '11111','collaborative_icpc4' ,3);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('901123', 7,  3, '2018-12-12', '11111','collaborative_icpc5' ,1);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('101123', 6,  5, '2019-12-12', '11111','collaborative_icpc6' ,2);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('201123', 5,  3, '2020-12-12', '11111','collaborative_ngpc' ,3);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('531123', 4,  4, '2021-12-12', '11111','collaborative_iupc' ,2);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('504123', 3,  2, '2012-12-12', '11111','collaborative_aust_iupc' ,3);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('521123', 2,  1, '2016-12-12', '11111','collaborative_fda' ,1);
+
+
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('501123', 2,  9, '2017-12-12', '22221',  'collaborative_icpc1' ,5);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('601123', 5,  8, '2017-12-07', '22221', 'collaborative_icpc2' ,6);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('701123', 5,  5, '2018-09-10', '22221', 'collaborative_icpc3' ,4);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('801123', 8,  6, '2017-12-12', '22221', 'collaborative_icpc4' ,5);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('901123', 3, 13, '2018-12-12', '22221', 'collaborative_icpc5' ,4);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name ,stu_id) values ('101123', 4,  5, '2019-12-12', '22221', 'collaborative_icpc6' ,6);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name ,stu_id) values ('201123', 1,  3, '2020-12-12', '22221',  'collaborative_ngpc' ,6);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name ,stu_id) values ('531123', 4,  4, '2021-12-12', '22221', 'collaborative_iupc',4);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name ,stu_id) values ('521123', 2,  1, '2016-12-12', '22221', 'collaborative_fda',5);
+
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name ,stu_id) values ('501123', 1,  10, '2017-12-12', '34421', 'collaborative_icpc1'  ,7);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name ,stu_id) values ('801123', 8,  6, '2017-12-12','34421', 'collaborative_icpc4' ,8);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name ,stu_id) values ('901123', 7,  3, '2018-12-12', '34421', 'collaborative_icpc5' ,9);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name,stu_id) values ('101123', 6,  5, '2019-12-12','34421', 'collaborative_icpc6',7);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name ,stu_id) values ('201123', 5,  3, '2020-12-12','34421', 'collaborative_ngpc' ,8);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name ,stu_id) values ('531123', 4,  4, '2021-12-12','34421', 'collaborative_iupc' ,7);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name ,stu_id) values ('504123', 3,  2, '2012-12-12','34421', 'collaborative_aust_iupc' ,8);
+insert into contest(contest_id,standing,solve_number,solving_year ,Team_id ,  contest_name ,stu_id) values ('521123', 2,  1, '2016-12-12', '34421', 'collaborative_fda' ,9);
+
+--insert into history(tot_solved,Team_id)  select Team_id,sum(solve_number) from contest group by team_id;
+update history set tot_solved= (select sum(solve_number) from contest where history.Team_id = contest.Team_id);
+
+
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '19281', '501123', '10A','how_many_digit'); 
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '34421', '101123', '20A', 'many_more'); 
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '11111', '601123', '40B', 'grid');  
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '42181', '501123', '10A', 'how_many_digit');
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '22221', '101123', '10F', 'counting'); 
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '11111', '901123', '10S', 'rigid'); 
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '34421', '531123', '10W', 'parallel'); 
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '22221', '531123', '10Q', 'contribution');  
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '11111', '201123', '50F', 'interesting');
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '11111', '101123', '20A', 'many_more');       
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '34421', '504123', '34A', 'many_number');          
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '43111', '201123', '23M','adhoc');  
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '34421', '201123', '23F','segment_interval'); 
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '11111' , '521123', '32N','queries');              
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '19281', '601123','32R','bruteforce');          
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '43111', '101123', '20A','many_more'); 
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '43111', '531123', '10W', 'parallel'); 
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '34421',  '901123', '10S', 'rigid'); 
+insert into Problem ( active_status,Team_id , contest_id ,p_id, p_name)  values ('yes', '42181' , '601123', '69C', 'grid'); 
+
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ('19281', '501123', '10A', 'python');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ('34421', '101123', '20A', 'JavaScript');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ( '11111', '601123', '40B', 'C++');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ( '42181', '501123', '10A', 'C');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ('22221', '101123', '10F', 'C++');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ('11111', '901123', '10S',  'python');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ( '34421', '531123', '10W',  'C++');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ( '22221', '531123', '10Q', 'Java');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ('11111', '201123', '50F', 'C');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ( '11111', '101123', '20A', 'C++');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ('34421', '504123', '34A', 'Java');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ('43111', '201123', '23M', 'C++');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ( '34421', '201123', '23F', 'C');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ('11111' , '521123', '32N', 'JavaScript');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ('19281', '601123','32R',  'C++');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ('43111', '101123', '20A', 'C++');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ('43111', '531123', '10W',  'C++');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ('34421',  '901123', '10S', 'python');    
+insert into Languages( Team_id ,contest_id , p_id , l_name)  values ('42181' , '601123', '69C', 'C++');    
+
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ('19281', '501123', '10A',  'ACC','01S','Shariful');    
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ('34421', '101123', '20A','WA','02a','mukim');    
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ('11111', '601123', '40B', 'RE','03d','pavel');    
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ( '42181', '501123', '10A', 'TLE','04r','parbej');    
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ('22221', '101123', '10F', 'CE','11f', 'arnob');    
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ('11111', '901123', '10S',  'MLE','02a','mukim');       
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ( '34421', '531123', '10W',  'TLE','11f', 'arnob');  
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values (  '22221', '531123', '10Q', 'CE','03d','pavel');    
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ( '11111', '201123', '50F', 'ACC','02a','mukim');     
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ('11111', '101123', '20A',  'ACC','03d','pavel');    
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ('34421', '504123', '34A',  'ACC','01S','Shariful');    
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ('43111', '201123', '23M', 'ACC','04r','parbej');    
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ( '34421', '201123', '23F', 'CE','02a','mukim');     
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ('11111' , '521123', '32N', 'PE','02a','mukim');    
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ('19281', '601123','32R', 'ACC','01S','Shariful');     
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ('43111', '101123', '20A', 'WA','04r','parbej');    
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ('43111', '531123', '10W', 'PE','02a','mukim');    
+insert into Judge( Team_id ,contest_id , p_id , p_succ_status ,   j_id , j_name)  values ('34421',  '901123', '10S', 'ACC','03d','pavel');   
+insert into Judge( Team_id ,contest_id , p_id ,    p_succ_status ,   j_id , j_name)  values ('42181' , '601123', '69C',  'ACC','01S','Shariful');     
+
+insert into Submission( Team_id ,contest_id , p_id ,  p_result_status,penalty_time)  values ('19281', '501123', '10A',  'ACC', 43);     
+insert into Submission( Team_id ,contest_id , p_id ,    p_result_status ,penalty_time)  values ('34421', '101123', '20A', 'ACC',  21);     
+insert into Submission( Team_id ,contest_id , p_id ,     p_result_status ,penalty_time)  values ( '11111', '601123', '40B', 'PE',32);     
+insert into Submission( Team_id ,contest_id , p_id ,    p_result_status ,penalty_time)  values ('42181', '501123', '10A', 'WA', 12);     
+insert into Submission( Team_id ,contest_id , p_id ,     p_result_status ,penalty_time)  values ('22221', '101123', '10F', 'ACC', 45);     
+insert into Submission( Team_id ,contest_id , p_id ,      p_result_status ,penalty_time)  values ('11111', '901123', '10S', 'PE', 65);     
+insert into Submission( Team_id ,contest_id , p_id ,   p_result_status ,penalty_time)  values ( '34421', '531123', '10W', 'CE',  04);     
+insert into Submission( Team_id ,contest_id , p_id ,    p_result_status ,penalty_time)  values ('22221', '531123', '10Q', 'ACC', 12);     
+insert into Submission( Team_id ,contest_id , p_id ,     p_result_status ,penalty_time)  values ( '11111', '201123', '50F',  'ACC', 72);     
+insert into Submission( Team_id ,contest_id , p_id ,     p_result_status , penalty_time)  values ('11111', '101123', '20A', 'ACC',13);     
+insert into Submission( Team_id ,contest_id , p_id ,   p_result_status, penalty_time)  values ( '34421', '504123', '34A', 'ACC',34);     
+insert into Submission( Team_id ,contest_id , p_id ,    p_result_status , penalty_time)  values ('43111', '201123', '23M',  'ACC',09);    
+insert into Submission( Team_id ,contest_id , p_id ,    p_result_status ,penalty_time)  values ('34421', '201123', '23F',   'ACC',82);     
+insert into Submission( Team_id ,contest_id , p_id  ,p_result_status ,penalty_time)  values ('11111' , '521123', '32N',   'ACC',07); 
+insert into Submission( Team_id ,contest_id , p_id ,      p_result_status ,penalty_time)  values ('19281', '601123','32R',   'ACC',10);  
+insert into Submission( Team_id ,contest_id , p_id ,      p_result_status,penalty_time)  values ('43111', '101123', '20A','ACC', 09);     
+insert into Submission( Team_id ,contest_id , p_id ,      p_result_status ,penalty_time)  values ('43111', '531123', '10W', 'ACC',22);     
+insert into Submission( Team_id ,contest_id , p_id ,      p_result_status,penalty_time)  values ('34421', '901123', '10S',   'ACC' , 04);     
+insert into Submission( Team_id ,contest_id , p_id ,      p_result_status,penalty_time)  values ('42181' , '601123', '69C', 'ACC', 16);     
+   
+ --description of each table
+DESC Submission;
+DESC Judge;
+DESC Languages;
+DESC problem;
+DESC contest;
+DESC team;
+DESC history;
+
+--LAB 02 & 03:
+
+-- data according each table
+
+select * from Submission;
+select * from Judge;
+select * from Languages;
+select * from problem;
+select * from contest;
+select * from team;
+select * from history;
+
+
+--add operation (adding column)
+alter table submission add temp_column VARCHAR2(20);
+desc submission ;
+select * from submission ;
+
+--drop operation (dropping column)
+alter table submission drop column temp_column;
+desc submission;
+select * from submission;
+--select operation
+SELECT team_id AS teams_id_number FROM team;
+
+
+-- SELECT DISTINCT METHOD
+SELECT DISTINCT (stu_id) FROM contest;
+
+
+--modify operation (modifying column data type)
+alter table problem modify p_name VARCHAR(60);
+desc problem;
+select * from problem;
+
+--rename operation (renaming column)
+alter table submission rename column  p_result_status to  prob_succ_status;
+desc submission;
+alter table submission rename column  prob_succ_status to  p_result_status;
+select * from submission;
+--update operation (updating a value)
+
+update judge set j_id = '230a' where j_name='mukim';
+desc judge;
+select * from judge;
+
+--delete operation (deleting a row from Submission table)
+delete from Submission where penalty_time=82;
+desc Submission;
+select * from Submission;
+insert into Submission( Team_id ,contest_id , p_id ,    p_result_status ,penalty_time)  values ('34421', '201123', '23F',   'ACC',82);   
+select * from Submission;
+
+--calculated field
+select (penalty_time/2) as penalty_time_divided_by_two from Submission   --Giving column different name (from lab 04) ;
+
+--applying conditions
+select   j_id  from Judge where  j_name='Shariful';
+
+--Range Search
+SELECT  Team_id , contest_id , p_id FROM Submission
+WHERE penalty_time BETWEEN 9 AND 21;
+
+SELECT  Team_id , contest_id , p_id FROM Submission
+WHERE penalty_time not BETWEEN 9 AND 21;
+
+--range operators
+SELECT  Team_id , contest_id , p_id FROM Submission
+WHERE penalty_time >=9 AND penalty_time<= 21  --Comparison Search Condition(from lab 04);
+
+SELECT  Team_id , contest_id , p_id FROM Submission
+WHERE penalty_time >=21 OR penalty_time <=9   --Compound Comparison Search Condition(from lab 04);
+
+--Set membership
+SELECT  Team_id , contest_id , p_id FROM Submission WHERE penalty_time IN (9,21);
+SELECT  Team_id , contest_id , p_id FROM Submission  WHERE penalty_time NOT IN (9,21);
+
+--Ordering by column values
+SELECT Team_id  FROM Submission ORDER BY penalty_time                   --Single Column Ordering(lab 04);
+SELECT Team_id  FROM Submission ORDER BY penalty_time    desc    ---descending order;
+
+--Ordering by column values(with multiple columns)
+select contest_id ,Team_id from contest
+order by standing , solve_number             --multi-column ordering(lab 04);
+select contest_id ,Team_id from contest
+order by standing , solve_number  desc;
+
+--Use of DISTINCT
+select distinct (Team_id) from Team;
+
+--Lab 04:
+
+--Pattern Matching
+select team_id,p_id from problem
+where p_name like '%how_many_digit%';
+select team_id,p_id from problem
+where p_name like 'how_many%';
+select team_id,solving_year from contest
+where contest_name like '%icpc1';
+
+--aggregate functions:
+select  max(penalty_time) from submission;
+
+select min(penalty_time) from submission;
+
+select  sum(solve_number) from contest where contest_name='collaborative_icpc4';
+
+select count(team_id) from contest;
+
+select count(*) from contest;
+select count(distinct (team_id)) from contest;
+select count(distinct (team_id)) from contest;
+select  avg(solve_number) from contest ;
+select  avg(nvl(solve_number,0)) from contest ;
+
+--GROUP BY clause 
+select count(solve_number) from contest group by team_id;
+SELECT contest_name, COUNT(solve_number) 
+from contest group by contest_name;
+
+SELECT team_id,COUNT(solve_number) 
+from contest group by team_id;
+SELECT team_id,COUNT(solve_number) 
+from contest where solving_year='2021-12-12'  group by team_id ;
+
+--HAVING clause
+SELECT team_id,COUNT(solve_number) 
+from contest  group by team_id   having  count(solve_number)>8 ;
+--lab 05
+--IN
+
+SELECT Team_id ,contest_id , p_id from judge where j_name in ('shariful','mukim','arnob');
+SELECT team_id from contest where solving_year in '2021-12-12' ;
+SELECT team_id from contest where solving_year in(select solving_year from contest  where standing=4);
+SELECT team_id from contest where solving_year in(select  o.solving_year from contest o,problem c where o.standing=4 AND o.contest_id = c.contest_id);
+
+--set operations
+--union all operation
+select team_id from team union all
+SELECT o.team_id from contest o where solving_year in(select  o.solving_year from contest o,problem c where o.standing=4 AND o.contest_id = c.contest_id);
+--union
+select team_id from team union 
+SELECT o.team_id from contest o where solving_year in(select  o.solving_year from contest o,problem c where o.standing=4 AND o.contest_id = c.contest_id);
+--intersect
+select team_id from team intersect
+SELECT o.team_id from contest o where solving_year in(select  o.solving_year from contest o,problem c where o.standing=4 AND o.contest_id = c.contest_id);
+--minus
+select team_id from team minus
+SELECT o.team_id from contest o where solving_year in(select  o.solving_year from contest o,problem c where o.standing=4 AND o.contest_id = c.contest_id);
+
+--lab 06(Joining multiple tables)
+--simple join examples
+
+--Join
+select t.team_id, c.contest_id,c.contest_name from team t join
+contest c on t.team_id = c.team_id;
+select t.team_id, c.contest_id,c.contest_name from team t join
+contest c on t.team_id = c.team_id and  t.stu_id = c.stu_id ;
+--natural join
+select team_id, contest_id,contest_name from team natural join contest;
+--Cross Joins/ Cartesian Products
+select p.j_name, r.p_id from judge p cross join submission r;	
+--Inner Join
+select t.team_id, c.contest_id, c.contest_name from team t inner join
+contest c on t.team_id = c.team_id;
+--Outer Join
+
+--LEFT Outer Join
+select t.team_id, c.contest_id, c.contest_name from team t left outer join
+contest c on t.team_id = c.team_id;
+--RIGHT Outer Join
+select t.team_id, c.contest_id, c.contest_name from team t right outer join
+contest c on t.team_id = c.team_id;
+--FULL Outer Join
+select t.team_id, c.contest_id, c.contest_name from team t full outer join
+contest c on t.team_id = c.team_id;
+--self join
+--(max penalty time)
+select p.penalty_time from submission p minus
+select p.penalty_time from submission p join submission q on p.penalty_time<q.penalty_time;
+--self join
+select penalty_time e, p_id m from submission e natural join submission f;
+
+--lab 07,08,09(pl/sql)
+
+--this block generate a random number from system...
+--according to that NUMBER a table will selected...
+--then it will generate a random number again..
+--that number will be a number in primary key...
+-- from there to last the given information will be shown...
+set SERVEROUTPUT on
+Begin
+dbms_output.put_line('welcome');
+end;
+/
+select sysdate from dual;
+select current_date from dual;
+select systimestamp from dual;
+
+set SERVEROUTPUT on
+Declare
+team_id_team team.Team_id %type;
+Stu_name_team team.Stu_name %type;
+T_name_team team.T_name%type;
+Varsity_name_team team.Varsity_name %type;
+
+contest_id_contest contest.contest_id%type;
+standing_contest contest.standing%type;
+solve_number_contest contest.solve_number%type;
+x integer;
+y integer;
+z integer;
+BEGIN
+SELECT dbms_random.value(1,2) into x FROM dual;
+dbms_output.put_line
+('For x=1:team    For x=2:contest');
+dbms_output.put_line('System selected value: ' || x);
+if x=1 then
+    SELECT dbms_random.value(1,10) into z FROM dual;
+    dbms_output.put_line('Start From: ' || z || ' Results:');
+    if (z>0 and z<10) then
+--------------------------------------for loop in PL/SQL-----------------------------------------------------------
+        for y in z..9 loop
+            dbms_output.put_line(' '|| y || 'no. TEAM DETAILS ARE:  ');
+
+            select Team_id into team_id_team from team where stu_id = y;
+            select Stu_name into Stu_name_team from team where stu_id= y;
+            select T_name into T_name_team from team where stu_id= y;
+            select Varsity_name into Varsity_name_team from team where stu_id= y;
+            dbms_output.put_line('Team Id : '|| team_id_team);
+            dbms_output.put_line('Student Name : '|| Stu_name_team);
+            dbms_output.put_line('Team Name : ' || T_name_team);
+            dbms_output.put_line('Varsity Name : ' || Varsity_name_team);
+       end loop;
+   else
+       dbms_output.put_line('Invalid');
+   end if;
+elsif x=2 then
+    SELECT dbms_random.value(2,9) into z FROM dual;
+    dbms_output.put_line('Start From: ' || z || ' Results:');
+    if (z>2 and z<9) then
+       dbms_output.put_line('not necessary to know');
+    else 
+       dbms_output.put_line('invalid');
+    end if;
+end if;
+end;
+/
+
+-- PLSQL
+SET SERVEROUTPUT ON
+DECLARE
+   STANDING_CONTEST  CONTEST.STANDING%TYPE;
+BEGIN
+   SELECT MAX(STANDING)  INTO STANDING_CONTEST FROM CONTEST;
+   DBMS_OUTPUT.PUT_LINE('THE HIGHEST STANDING IS  : ' || STANDING_CONTEST );
+ END;
+/
+
+SET SERVEROUTPUT ON
+DECLARE
+   MIN_STUID  CONTEST.STU_ID%TYPE;
+BEGIN
+   SELECT MIN(A.STU_ID) INTO MIN_STUID   FROM CONTEST A JOIN TEAM C USING(TEAM_ID);
+   DBMS_OUTPUT.PUT_LINE('THE MINIMUM ID IS   : ' || MIN_STUID);
+ END;
+/
+
+
+
+SET SERVEROUTPUT ON
+DECLARE
+--------------------------------------creating cursor in PL/SQL-----------------------------------------------------------
+   CURSOR val   IS SELECT team_id, p_id  FROM problem;
+ valuewould val%ROWTYPE;
+BEGIN
+OPEN val;
+--------------------------------------normal loop in PL/SQL-----------------------------------------------------------
+  LOOP
+    FETCH val into valuewould;
+    EXIT WHEN  val %notfound;
+  DBMS_OUTPUT.PUT_LINE ('Team id :   ' || valuewould.team_id || '  Problem id:        ' || valuewould.p_id);
+  END LOOP;
+ CLOSE val;
+END;
+/
+
+-- PLSQL PROCEDURE
+SET SERVEROUTPUT ON;
+CREATE OR REPLACE PROCEDURE GET_POSITION IS 
+    STAND_CONT CONTEST.STANDING%type;
+BEGIN
+
+    SELECT STANDING INTO STAND_CONT
+    FROM CONTEST
+    WHERE SOLVE_NUMBER= (SELECT MAX(SOLVE_NUMBER) FROM CONTEST);
+    DBMS_OUTPUT.PUT_LINE('STANDING : '|| STAND_CONT);
+END;
+/
+SHOW ERRORS;
+
+
+BEGIN
+   GET_POSITION;
+END;
+/
+
+
+-- PLSQL FUNCTION
+SET SERVEROUTPUT ON
+CREATE OR REPLACE FUNCTION AVG_SOLVENO RETURN NUMBER IS
+   AVG_SOLVE CONTEST.SOLVE_NUMBER%type;
+BEGIN
+  SELECT AVG(SOLVE_NUMBER) INTO AVG_SOLVE
+  FROM CONTEST;
+   RETURN AVG_SOLVE;
+END;
+/
+
+BEGIN
+dbms_output.put_line('AVERAGE SOLVE NUMBER IS : ' || AVG_SOLVENO);
+END;
+/
+--TRIGGER
+CREATE OR REPLACE TRIGGER check_stuid BEFORE INSERT OR UPDATE ON 
+team
+FOR EACH ROW
+DECLARE
+ c_min constant integer := 1;
+ c_max constant integer "= 18;
+BEGIN
+ IF :new.stu_id > c_max  OR :new.stu_id < c_min THEN
+ RAISE_APPLICATION_ERROR(-20000,'New id r is too small or large');
+END IF;
+END;
+/
+
+insert into Team values ('11111', 'isha','a_val','DIU',30);  -----Throw an error for invalid  insertions
+
+--------------------------------------dropping and creating dummy table to show some operations in pl/sql--------------------------------------
+drop table dummy_table;
+declare
+   c int;
+begin
+   select count(*) into c from user_tables where table_name = upper('dummy_table');
+EXCEPTION
+    WHEN no_data_found THEN
+        c := 0;
+if (c = 1) then
+      execute immediate q'[drop table dummy_table]'; -- executing the command drop table
+end if;
+end;
+/
+
+create table dummy_table (
+  d_roll integer,
+  d_num integer
+);
+
+
+
+------showing the current user name
+show user; 
+
+-------------proper example of how the transaction actually works for a single user
+
+insert into dummy_table values (1807043,43);
+
+insert into dummy_table values (1807005,05);
+commit;
+insert into dummy_table values (1807060,24);
+SAVEPOINT x_save;
+insert into dummy_table values (1807053,25);
+
+insert into dummy_table values (1807054,26);
+
+SAVEPOINT y_save;
+insert into dummy_table values (1807055,27);
+
+select * from dummy_table;
+rollback to x_save;
+select *from dummy_table;
+delete from dummy_table;
+select *from dummy_table;
+rollback;
+
+
+--create view;
+CREATE OR REPLACE VIEW PARTICIPANTS AS SELECT  STU_NAME,TEAM_ID
+ FROM TEAM C JOIN CONTEST A USING(TEAM_ID);
+
+SELECT LEAST (TO_DATE ('22-DEC-2007'),TO_DATE ('12-DEC-2008'))
+FROM dual;
+SELECT GREATEST (TO_DATE ('22-DEC-2007'),TO_DATE ('12-DEC2008'))
+FROM dual;
+drop table dummy;
+create table dummy (
+emp_name varchar(20),
+ d date
+);
+insert into dummy values ('ishan',TO_DATE('17-JUN-1987', 'dd-MON-yyyy')); 
+select LAST_DAY (d) from dummy;
+
+SELECT emp_name, EXTRACT(Month FROM d) AS Month
+FROM dummy;
+
+set SERVEROUTPUT on;
+begin
+dbms_output.put_line('Project Name:  CONTEST MANAGEMENT DATABASE .');
+dbms_output.put_line(' CREATED BY UMME ISRAT AFROZ');
+dbms_output.put_line('-----------------------------------------------------------------------------');
+end;
+/
+
+  
+         
+
+
+
+   
+
+         
+
+
+
+
+
+
