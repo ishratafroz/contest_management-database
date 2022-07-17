@@ -396,16 +396,16 @@ SELECT team_id from contest where solving_year in(select  o.solving_year from co
 --set operations
 --union all operation
 select team_id from team union all
-SELECT o.team_id from contest o where solving_year in(select  o.solving_year from contest o,problem c where o.standing=4 AND o.contest_id = c.contest_id);
+SELECT o.team_id from contest o where solving_year in union all (select  o.solving_year from contest o,problem c where o.standing=4 AND o.contest_id = c.contest_id);
 --union
 select team_id from team union 
-SELECT o.team_id from contest o where solving_year in(select  o.solving_year from contest o,problem c where o.standing=4 AND o.contest_id = c.contest_id);
+SELECT o.team_id from contest o where solving_year in union (select  o.solving_year from contest o,problem c where o.standing=4 AND o.contest_id = c.contest_id);
 --intersect
 select team_id from team intersect
-SELECT o.team_id from contest o where solving_year in(select  o.solving_year from contest o,problem c where o.standing=4 AND o.contest_id = c.contest_id);
+SELECT o.team_id from contest o where solving_year in intersect (select  o.solving_year from contest o,problem c where o.standing=4 AND o.contest_id = c.contest_id);
 --minus
 select team_id from team minus
-SELECT o.team_id from contest o where solving_year in(select  o.solving_year from contest o,problem c where o.standing=4 AND o.contest_id = c.contest_id);
+SELECT o.team_id from contest o where solving_year in minus (select  o.solving_year from contest o,problem c where o.standing=4 AND o.contest_id = c.contest_id);
 
 --lab 06(Joining multiple tables)
 --simple join examples
